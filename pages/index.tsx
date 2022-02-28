@@ -9,8 +9,11 @@ const Home: NextPage = () => {
   const [tiles, setTiles] = useState(arr);
   const [activeTile, setActiveTile] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
+  const [isEndOfRow, setIsEndOfRow] = useState(false);
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
+
+  //TODO: function that checks next empty tile for keyboard correction
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -29,9 +32,15 @@ const Home: NextPage = () => {
   }
 
   function handleDelete() {
-    if (activeTile === 0) return;
-    if (activeTile <= rowStart) return;
     const newTiles = [...tiles];
+
+    if (newTiles[activeTile] !== "") {
+      newTiles[activeTile] = "";
+      setTiles(newTiles);
+      return;
+    }
+    if (activeTile <= rowStart) return;
+    if (activeTile === 0) return;
 
     newTiles[activeTile - 1] = "";
     setActiveTile(activeTile - 1);
@@ -40,7 +49,9 @@ const Home: NextPage = () => {
   }
 
   function handleSubmit() {
-    if (activeTile !== rowStart + 5) {
+    const guess = tiles.slice(rowStart, rowStart + 5);
+
+    if (activeTile !== rowStart + 5 || guess.includes("")) {
       toast.error("Por favor insira 5 letras.", {
         style: {
           border: "1px solid #713200",
@@ -57,6 +68,7 @@ const Home: NextPage = () => {
 
     if (activeRow >= 5) return;
     setActiveRow(activeRow + 1);
+    setIsEndOfRow(false);
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -71,11 +83,28 @@ const Home: NextPage = () => {
     if (keyLetters.includes(e.key)) {
       handleLetterInsertion(e.key);
     }
+
+    if (e.key === "ArrowLeft") {
+      if (activeTile === 0) return;
+      if (activeTile <= rowStart) return;
+      setActiveTile(activeTile - 1);
+    }
+
+    if (e.key === "ArrowRight" || e.key === " ") {
+      if (activeTile > rowStart + 3) return;
+      setActiveTile(activeTile + 1);
+    }
   }
 
   return (
     <>
-      <GuessGrid grid={tiles} activeTile={activeTile}/>
+      <GuessGrid
+        grid={tiles}
+        activeTile={activeTile}
+        isEndOfRow={isEndOfRow}
+        setIsEndOfRow={setIsEndOfRow}
+        rowStart={rowStart}
+      />
       <Keyboard
         handleMouseClick={handleLetterInsertion}
         handleDelete={handleDelete}
