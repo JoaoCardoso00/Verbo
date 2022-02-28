@@ -1,93 +1,48 @@
 import styles from "./styles.module.scss";
 
-export function Keyboard() {
+interface KeyboardProps {
+  handleMouseClick: Function;
+  handleDelete: Function;
+  handleSubmit: Function;
+}
+
+export function Keyboard({
+  handleMouseClick,
+  handleDelete,
+  handleSubmit,
+}: KeyboardProps) {
+  const alphabet = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+
   return (
     <>
       <div className={styles.keyboard}>
-        <button className={styles.key} data-key="Q">
-          Q
-        </button>
-        <button className={styles.key} data-key="W">
-          W
-        </button>
-        <button className={styles.key} data-key="E">
-          E
-        </button>
-        <button className={styles.key} data-key="R">
-          R
-        </button>
-        <button className={styles.key} data-key="T">
-          T
-        </button>
-        <button className={styles.key} data-key="Y">
-          Y
-        </button>
-        <button className={styles.key} data-key="U">
-          U
-        </button>
-        <button className={styles.key} data-key="I">
-          I
-        </button>
-        <button className={styles.key} data-key="O">
-          O
-        </button>
-        <button className={styles.key} data-key="P">
-          P
-        </button>
+        {alphabet[0].split("").map((letter) => (
+          <div className={styles.key} onClick={() => handleMouseClick(letter)}>
+            {letter}
+          </div>
+        ))}
         <div className="space"></div>
-        <button className={styles.key} data-key="A">
-          A
-        </button>
-        <button className={styles.key} data-key="S">
-          S
-        </button>
-        <button className={styles.key} data-key="D">
-          D
-        </button>
-        <button className={styles.key} data-key="F">
-          F
-        </button>
-        <button className={styles.key} data-key="G">
-          G
-        </button>
-        <button className={styles.key} data-key="H">
-          H
-        </button>
-        <button className={styles.key} data-key="J">
-          J
-        </button>
-        <button className={styles.key} data-key="K">
-          K
-        </button>
-        <button className={styles.key} data-key="L">
-          L
-        </button>
+        {alphabet[1].split("").map((letter) => (
+          <div className={styles.key} onClick={() => handleMouseClick(letter)}>
+            {letter}
+          </div>
+        ))}
         <div className="space"></div>
-        <button data-enter className={styles.key + " " + styles.large}>
+        <button
+          className={`${styles.key} ${styles.large}`}
+          onClick={() => handleSubmit()}
+        >
           Enter
         </button>
-        <button className={styles.key} data-key="Z">
-          Z
-        </button>
-        <button className={styles.key} data-key="X">
-          X
-        </button>
-        <button className={styles.key} data-key="C">
-          C
-        </button>
-        <button className={styles.key} data-key="V">
-          V
-        </button>
-        <button className={styles.key} data-key="B">
-          B
-        </button>
-        <button className={styles.key} data-key="N">
-          N
-        </button>
-        <button className={styles.key} data-key="M">
-          M
-        </button>
-        <button className={styles.key + " " + styles.large}>
+        {alphabet[2].split("").map((letter) => (
+          <div className={styles.key} onClick={() => handleMouseClick(letter)}>
+            {letter}
+          </div>
+        ))}
+        <button
+          className={styles.key + " " + styles.large}
+          onClick={() => handleDelete()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
