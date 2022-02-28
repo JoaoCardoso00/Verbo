@@ -1,0 +1,42 @@
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(auto, 1.25em));
+  grid-auto-rows: 3em;
+  gap: 0.25em;
+  justify-content: center;
+}
+
+.key {
+  font-size: inherit;
+  grid-column: span 2;
+  border: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(
+    var(--hue, 336),
+    var(--saturation, 4%),
+    calc(var(--lightness-offset, 5%) + var(--lightness, 24%))
+  );
+  color: white;
+  fill: white;
+  text-transform: uppercase;
+  border-radius: 0.25em;
+  cursor: pointer;
+  user-select: none;
+
+  &.large {
+    grid-column: span 3;
+  }
+
+  &:hover,
+  &:focus {
+    --lightness-offset: 10%;
+  }
+
+  svg {
+    width: 1.75em;
+    height: 1.75em;
+  }
+}
