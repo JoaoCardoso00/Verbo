@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
@@ -14,7 +14,9 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-  }, []);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
@@ -59,18 +61,16 @@ const Home: NextPage = () => {
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter") {
-      console.log(e.key);
+      handleSubmit();
     }
 
     if (e.key === "Backspace") {
-      console.log(e.key);
+      handleDelete();
     }
 
     if (keyLetters.includes(e.key)) {
-      console.log(e.key);
+      handleLetterInsertion(e.key);
     }
-
-    document.addEventListener("keydown", handleKeyDown);
   }
 
   return (

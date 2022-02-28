@@ -8,8 +8,8 @@ interface GuessGridProps {
 export function GuessGrid({ grid }: GuessGridProps) {
   return (
     <div className={styles.guessGrid}>
-      {grid.map((tile) => (
-        <Tile letter={tile} key={Math.random() * 1000} />
+      {grid.map((tile, index) => (
+        <Tile letter={tile} key={index} />
       ))}
     </div>
   );
