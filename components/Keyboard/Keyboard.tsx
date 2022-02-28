@@ -17,13 +17,21 @@ export function Keyboard({
     <>
       <div className={styles.keyboard}>
         {alphabet[0].split("").map((letter) => (
-          <div className={styles.key} onClick={() => handleMouseClick(letter)}>
+          <div
+            className={styles.key}
+            onClick={() => handleMouseClick(letter)}
+            key={Math.random() * 1000}
+          >
             {letter}
           </div>
         ))}
         <div className="space"></div>
         {alphabet[1].split("").map((letter) => (
-          <div className={styles.key} onClick={() => handleMouseClick(letter)}>
+          <div
+            className={styles.key}
+            onClick={() => handleMouseClick(letter)}
+            key={Math.random() * 1000}
+          >
             {letter}
           </div>
         ))}
@@ -35,7 +43,11 @@ export function Keyboard({
           Enter
         </button>
         {alphabet[2].split("").map((letter) => (
-          <div className={styles.key} onClick={() => handleMouseClick(letter)}>
+          <div
+            className={styles.key}
+            onClick={() => handleMouseClick(letter)}
+            key={Math.random() * 1000}
+          >
             {letter}
           </div>
         ))}

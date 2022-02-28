@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
@@ -10,8 +10,13 @@ const Home: NextPage = () => {
   const [activeTile, setActiveTile] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
   const rowStart = activeRow * 5;
+  const keyLetters = "abcdefghijklmnopqrstuvwxyz";
 
-  function handleMouseClick(letter: string) {
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+  }, []);
+
+  function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
     const newTiles = [...tiles];
 
@@ -34,7 +39,7 @@ const Home: NextPage = () => {
 
   function handleSubmit() {
     if (activeTile !== rowStart + 5) {
-      toast.error("Por favor insira 5 letras", {
+      toast.error("Por favor insira 5 letras.", {
         style: {
           border: "1px solid #713200",
           padding: "16px",
@@ -52,11 +57,27 @@ const Home: NextPage = () => {
     setActiveRow(activeRow + 1);
   }
 
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Enter") {
+      console.log(e.key);
+    }
+
+    if (e.key === "Backspace") {
+      console.log(e.key);
+    }
+
+    if (keyLetters.includes(e.key)) {
+      console.log(e.key);
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+  }
+
   return (
     <>
       <GuessGrid grid={tiles} />
       <Keyboard
-        handleMouseClick={handleMouseClick}
+        handleMouseClick={handleLetterInsertion}
         handleDelete={handleDelete}
         handleSubmit={handleSubmit}
       />
