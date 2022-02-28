@@ -75,7 +75,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <GuessGrid grid={tiles} />
+      <GuessGrid grid={tiles} activeTile={activeTile}/>
       <Keyboard
         handleMouseClick={handleLetterInsertion}
         handleDelete={handleDelete}
