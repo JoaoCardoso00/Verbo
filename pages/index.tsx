@@ -51,7 +51,7 @@ const Home: NextPage = () => {
   function handleSubmit() {
     const guess = tiles.slice(rowStart, rowStart + 5);
 
-    if (activeTile !== rowStart + 5 || guess.includes("")) {
+    if (guess.includes("")) {
       toast.error("Por favor insira 5 letras.", {
         style: {
           border: "1px solid #713200",
@@ -67,6 +67,11 @@ const Home: NextPage = () => {
     }
 
     if (activeRow >= 5) return;
+
+    if (activeTile !== rowStart + 5) {
+      setActiveTile(rowStart + 5);
+    }
+
     setActiveRow(activeRow + 1);
     setIsEndOfRow(false);
   }
