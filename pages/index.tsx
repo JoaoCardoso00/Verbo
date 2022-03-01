@@ -34,7 +34,11 @@ const Home: NextPage = () => {
 
     if (tiles[activeTile] === "" && tiles[activeTile + 1] === "") {
       // +1
-      setActiveTile(activeTile + 1);
+      if (activeTile === rowStart + 4 && availableTiles.length !== 1) {
+        setActiveTile(rowStart + (availableTiles[0] - 1));
+      } else {
+        setActiveTile(activeTile + 1);
+      }
     } else if (tiles[activeTile] === "" && tiles[activeTile + 1] !== "") {
       //next available
       if (availableTiles.length === 1) {
