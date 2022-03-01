@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
+import { getAvailableTiles } from "../lib/helpers";
 
 const Home: NextPage = () => {
   const arr = Array.apply(null, Array(30)).map(() => "");
@@ -10,10 +11,9 @@ const Home: NextPage = () => {
   const [activeTile, setActiveTile] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
   const [isEndOfRow, setIsEndOfRow] = useState(false);
+  const [guess, setGuess] = useState<string[]>([]);
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
-
-  //TODO: function that checks next empty tile for keyboard correction
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -21,12 +21,38 @@ const Home: NextPage = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    setGuess(tiles.slice(rowStart, rowStart + 5));
+  }, [tiles]);
+
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
     const newTiles = [...tiles];
+    const availableTiles = getAvailableTiles(guess);
 
     newTiles[activeTile] = letter;
-    setActiveTile(activeTile + 1);
+
+    if (tiles[activeTile] === "" && tiles[activeTile + 1] === "") {
+      // +1
+      setActiveTile(activeTile + 1);
+    } else if (tiles[activeTile] === "" && tiles[activeTile + 1] !== "") {
+      //next available
+      if (availableTiles.length === 1) {
+        setActiveTile(rowStart + 5);
+      } else {
+        setActiveTile(rowStart + (availableTiles[1] - 1));
+      }
+    } else if (tiles[activeTile] !== "") {
+      // next available
+      if (availableTiles.length === 0) {
+        setActiveTile(rowStart + 5);
+      } else {
+        setActiveTile(rowStart + availableTiles[0] - 1);
+      }
+    } else {
+      // +1
+      setActiveTile(rowStart + availableTiles[0]);
+    }
 
     setTiles(newTiles);
   }
@@ -74,6 +100,7 @@ const Home: NextPage = () => {
 
     setActiveRow(activeRow + 1);
     setIsEndOfRow(false);
+    setGuess(["", "", "", "", ""]);
   }
 
   function handleKeyDown(e: KeyboardEvent) {
