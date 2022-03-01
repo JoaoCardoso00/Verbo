@@ -1,3 +1,5 @@
+import { Words } from "./words";
+
 export function getAvailableTiles(rowGuess: string[]) {
   let availableTiles: number[] = [];
 
@@ -8,4 +10,12 @@ export function getAvailableTiles(rowGuess: string[]) {
   });
 
   return availableTiles;
+}
+
+
+export function validateWord(word:string) {
+  if (Words.includes(word)) {
+    return true;
+  }
+  return false;
 }

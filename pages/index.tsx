@@ -4,8 +4,10 @@ import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
 import { getAvailableTiles } from "../lib/helpers";
+import {useDailyWord} from '../lib/hooks'
+import {validateWord} from '../lib/helpers'
 
-const Home: NextPage = () => {
+const Game: NextPage = () => {
   const arr = Array.apply(null, Array(30)).map(() => "");
   const [tiles, setTiles] = useState(arr);
   const [activeTile, setActiveTile] = useState(0);
@@ -14,6 +16,7 @@ const Home: NextPage = () => {
   const [guess, setGuess] = useState<string[]>([]);
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
+  const [dailyWord, setDailyWord] = useState("");
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -24,6 +27,10 @@ const Home: NextPage = () => {
   useEffect(() => {
     setGuess(tiles.slice(rowStart, rowStart + 5));
   }, [tiles]);
+
+  useEffect(() => {
+    setDailyWord(useDailyWord())
+  }, [])
 
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
@@ -102,9 +109,27 @@ const Home: NextPage = () => {
       setActiveTile(rowStart + 5);
     }
 
-    setActiveRow(activeRow + 1);
-    setIsEndOfRow(false);
-    setGuess(["", "", "", "", ""]);
+    if(
+      validateWord(guess.toString().replaceAll(",", "").toUpperCase())) {
+      setActiveRow(activeRow + 1);
+      setIsEndOfRow(false);
+      setGuess(["", "", "", "", ""]);
+    } else {
+      toast.error("Palavra Inválida", {
+        style: {
+          border: "1px solid #713200",
+          padding: "16px",
+          color: "#713200",
+        },
+        iconTheme: {
+          primary: "#713200",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
+
+
+
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -150,4 +175,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Game;
