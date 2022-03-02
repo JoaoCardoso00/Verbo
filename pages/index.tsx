@@ -3,17 +3,20 @@ import { useEffect, useState } from "react";
 import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
-import { getAvailableTiles } from "../lib/helpers";
+import { checkWord, getAvailableTiles } from "../lib/helpers";
 import {useDailyWord} from '../lib/hooks'
 import {validateWord} from '../lib/helpers'
+import {checkWin} from '../lib/helpers'
 
 const Game: NextPage = () => {
   const arr = Array.apply(null, Array(30)).map(() => "");
+  const arr2 = Array.apply(null, Array(30)).map(() => 0);
   const [tiles, setTiles] = useState(arr);
   const [activeTile, setActiveTile] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
   const [isEndOfRow, setIsEndOfRow] = useState(false);
   const [guess, setGuess] = useState<string[]>([]);
+  const [wordColors, setWordColors] = useState(arr2)
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
   const [dailyWord, setDailyWord] = useState("");
@@ -111,9 +114,21 @@ const Game: NextPage = () => {
 
     if(
       validateWord(guess.toString().replaceAll(",", "").toUpperCase())) {
+
+      // if(checkWin(guess, dailyWord.toLocaleLowerCase().split(''))) {
+      //   // stop interaction
+      //   // do something
+      //   return;
+      // }
+
+      console.log(checkWord(guess, dailyWord.toLocaleLowerCase().split('')))
+      
       setActiveRow(activeRow + 1);
+
       setIsEndOfRow(false);
+
       setGuess(["", "", "", "", ""]);
+
     } else {
       toast.error("Palavra Inválida", {
         style: {
