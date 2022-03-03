@@ -23,6 +23,7 @@ const Game: NextPage = () => {
   const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>(
     []
   );
+  const [gameEnded, setGameEnded] = useState(false);
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
   const [dailyWord, setDailyWord] = useState("");
@@ -112,9 +113,7 @@ const Game: NextPage = () => {
       return;
     }
 
-    if (activeRow >= 5) return;
-
-    if (activeTile !== rowStart + 5) {
+    if (activeTile !== rowStart + 5 && activeRow !== 5) {
       setActiveTile(rowStart + 5);
     }
 
@@ -162,15 +161,28 @@ const Game: NextPage = () => {
       setInWordCorrectPosition([...new Set(inWordCorrectPositionTemp)]);
 
       if (checkWin(guess, dailyWord.toLocaleLowerCase().split(""))) {
-        toast.success("You Win!");
+        toast.success("Você ganhou!");
         document.removeEventListener("keydown", handleKeyDown);
         setIsKeyboardActive(false);
         return;
       }
 
-      setActiveRow(activeRow + 1);
-      setIsEndOfRow(false);
-      setGuess(["", "", "", "", ""]);
+      if (
+        activeRow === 5 &&
+        !checkWin(guess, dailyWord.toLocaleLowerCase().split(""))
+      ) {
+        toast.error("Você perdeu :(");
+        document.removeEventListener("keydown", handleKeyDown);
+        setGameEnded(true);
+        setIsKeyboardActive(false);
+        return;
+      }
+
+      if (!(activeRow >= 5)) {
+        setActiveRow(activeRow + 1);
+        setIsEndOfRow(false);
+        setGuess(["", "", "", "", ""]);
+      }
     } else {
       toast.error("Palavra Inválida", {
         style: {
@@ -187,27 +199,29 @@ const Game: NextPage = () => {
   }
 
   function handleKeyDown(e: KeyboardEvent) {
-    if (e.key === "Enter") {
-      handleSubmit();
-    }
+    if (!gameEnded) {
+      if (e.key === "Enter") {
+        handleSubmit();
+      }
 
-    if (e.key === "Backspace") {
-      handleDelete();
-    }
+      if (e.key === "Backspace") {
+        handleDelete();
+      }
 
-    if (keyLetters.includes(e.key)) {
-      handleLetterInsertion(e.key);
-    }
+      if (keyLetters.includes(e.key)) {
+        handleLetterInsertion(e.key);
+      }
 
-    if (e.key === "ArrowLeft") {
-      if (activeTile === 0) return;
-      if (activeTile <= rowStart) return;
-      setActiveTile(activeTile - 1);
-    }
+      if (e.key === "ArrowLeft") {
+        if (activeTile === 0) return;
+        if (activeTile <= rowStart) return;
+        setActiveTile(activeTile - 1);
+      }
 
-    if (e.key === "ArrowRight" || e.key === " ") {
-      if (activeTile > rowStart + 3) return;
-      setActiveTile(activeTile + 1);
+      if (e.key === "ArrowRight" || e.key === " ") {
+        if (activeTile > rowStart + 3) return;
+        setActiveTile(activeTile + 1);
+      }
     }
   }
 
