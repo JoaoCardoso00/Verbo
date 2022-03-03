@@ -18,15 +18,15 @@
   }
 
   &.notInWord {
-    background: black;
+    background: #4b4b4e;
   }
 
   &.inWordWrongPosition {
-    background: yellow;
+    background: #e4ca53;
   }
   
   &.inWordRightPosition {
-    background: green;
+    background: #66af60;
   }
 
 }
