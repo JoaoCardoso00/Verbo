@@ -29,7 +29,7 @@ export function Keyboard({
     }
   }
 
-  function handleKeyboardDelete() {
+  function handleKeyboardSubmit() {
     if (isActive) {
       handleSubmit();
     } else {
@@ -37,7 +37,7 @@ export function Keyboard({
     }
   }
 
-  function handleKeyboardSubmit() {
+  function handleKeyboardDelete() {
     if (isActive) {
       handleDelete();
     } else {
@@ -86,7 +86,7 @@ export function Keyboard({
         <div className="space"></div>
         <button
           className={`${styles.key} ${styles.large}`}
-          onClick={() => handleKeyboardSubmit()}
+          onClick={() => handleKeyboardDelete()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +111,7 @@ export function Keyboard({
         ))}
         <button
           className={`${styles.key} ${styles.large}`}
-          onClick={() => handleKeyboardDelete()}
+          onClick={() => handleKeyboardSubmit()}
         >
           Enter
         </button>
