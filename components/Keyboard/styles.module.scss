@@ -39,4 +39,16 @@
     width: 1.75em;
     height: 1.75em;
   }
+
+  &.notInWord {
+    background: black;
+  }
+
+  &.inWordWrongPosition {
+    background: yellow;
+  }
+  
+  &.inWordRightPosition {
+    background: green;
+  }
 }

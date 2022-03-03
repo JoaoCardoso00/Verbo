@@ -29,9 +29,9 @@ export function checkWin(word:string[], dailyWord:string[]) {
 
 export function checkWord(word: string[], dailyWord: string[]) {
 
-  // 0: Not in Word
-  // 1: in Word wrong position
-  // 2: in word correct position
+  // 1: Not in Word
+  // 2: in Word wrong position
+  // 3: in word correct position
 
   let temp = dailyWord;
   let res: number[] = []
@@ -40,19 +40,19 @@ export function checkWord(word: string[], dailyWord: string[]) {
     for(let j = 0; j < temp.length; j++) {
       if(temp.includes(word[i])){
         if(word[i] === temp[i]) {
-          res.push(2);
+          res.push(3);
           temp[i] = ""
           break;
         } else {
           if(word[i] !== temp[j]) {
             continue;
           }
-          res.push(1);
+          res.push(2);
           temp[j] = ""
           break;
         }
       } else {
-        res.push(0);
+        res.push(1);
         break;
       }
     }

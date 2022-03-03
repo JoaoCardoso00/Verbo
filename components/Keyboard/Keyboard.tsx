@@ -4,22 +4,70 @@ interface KeyboardProps {
   handleMouseClick: Function;
   handleDelete: Function;
   handleSubmit: Function;
+  isActive: boolean;
+  notInWord: string[];
+  inWordWrongPosition: string[];
+  inWordCorrectPosition: string[];
 }
 
 export function Keyboard({
   handleMouseClick,
   handleDelete,
   handleSubmit,
+  isActive,
+  notInWord,
+  inWordWrongPosition,
+  inWordCorrectPosition,
 }: KeyboardProps) {
   const alphabet = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+
+  function handleClick(letter: string) {
+    if (isActive) {
+      handleMouseClick(letter);
+    } else {
+      return;
+    }
+  }
+
+  function handleKeyboardDelete() {
+    if (isActive) {
+      handleSubmit();
+    } else {
+      return;
+    }
+  }
+
+  function handleKeyboardSubmit() {
+    if (isActive) {
+      handleDelete();
+    } else {
+      return;
+    }
+  }
+
+  function checkKeyClass(letter: string) {
+    const lowerCaseLetter = letter.toLowerCase();
+
+    if (notInWord.includes(lowerCaseLetter)) {
+      return `${styles.notInWord}`;
+    } else if (
+      inWordWrongPosition.includes(lowerCaseLetter) &&
+      !inWordCorrectPosition.includes(lowerCaseLetter)
+    ) {
+      return `${styles.inWordWrongPosition}`;
+    } else if (inWordCorrectPosition.includes(lowerCaseLetter)) {
+      return `${styles.inWordRightPosition}`;
+    } else {
+    }
+  }
 
   return (
     <>
       <div className={styles.keyboard}>
         {alphabet[0].split("").map((letter) => (
           <div
-            className={styles.key}
-            onClick={() => handleMouseClick(letter)}
+            className={`${styles.key} ${checkKeyClass(letter)}`}
+            onClick={() => handleClick(letter)}
             key={Math.random() * 1000}
           >
             {letter}
@@ -28,8 +76,8 @@ export function Keyboard({
         <div className="space"></div>
         {alphabet[1].split("").map((letter) => (
           <div
-            className={styles.key}
-            onClick={() => handleMouseClick(letter)}
+            className={`${styles.key} ${checkKeyClass(letter)}`}
+            onClick={() => handleClick(letter)}
             key={Math.random() * 1000}
           >
             {letter}
@@ -38,22 +86,22 @@ export function Keyboard({
         <div className="space"></div>
         <button
           className={`${styles.key} ${styles.large}`}
-          onClick={() => handleSubmit()}
+          onClick={() => handleKeyboardSubmit()}
         >
           Enter
         </button>
         {alphabet[2].split("").map((letter) => (
           <div
-            className={styles.key}
-            onClick={() => handleMouseClick(letter)}
+            className={`${styles.key} ${checkKeyClass(letter)}`}
+            onClick={() => handleClick(letter)}
             key={Math.random() * 1000}
           >
             {letter}
           </div>
         ))}
         <button
-          className={styles.key + " " + styles.large}
-          onClick={() => handleDelete()}
+          className={`${styles.key} ${styles.large}`}
+          onClick={() => handleKeyboardDelete()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

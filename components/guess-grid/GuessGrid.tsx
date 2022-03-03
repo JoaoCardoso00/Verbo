@@ -8,6 +8,7 @@ interface GuessGridProps {
   isEndOfRow: boolean;
   setIsEndOfRow: Function;
   rowStart: number;
+  wordColors: number[];
 }
 
 export function GuessGrid({
@@ -16,6 +17,7 @@ export function GuessGrid({
   isEndOfRow,
   setIsEndOfRow,
   rowStart,
+  wordColors
 }: GuessGridProps) {
   useEffect(() => {
     setIsEndOfRow(activeTile === rowStart + 5);
@@ -30,6 +32,7 @@ export function GuessGrid({
           activeTile={activeTile}
           tileNumber={index}
           isEndOfRow={isEndOfRow}
+          wordColors={wordColors}
         />
       ))}
     </div>

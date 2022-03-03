@@ -16,4 +16,17 @@
   &.active {
     background: #53494575;
   }
+
+  &.notInWord {
+    background: black;
+  }
+
+  &.inWordWrongPosition {
+    background: yellow;
+  }
+  
+  &.inWordRightPosition {
+    background: green;
+  }
+
 }

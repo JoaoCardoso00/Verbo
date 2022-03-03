@@ -4,9 +4,9 @@ import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
 import { checkWord, getAvailableTiles } from "../lib/helpers";
-import {useDailyWord} from '../lib/hooks'
-import {validateWord} from '../lib/helpers'
-import {checkWin} from '../lib/helpers'
+import { useDailyWord } from "../lib/hooks";
+import { validateWord } from "../lib/helpers";
+import { checkWin } from "../lib/helpers";
 
 const Game: NextPage = () => {
   const arr = Array.apply(null, Array(30)).map(() => "");
@@ -16,7 +16,13 @@ const Game: NextPage = () => {
   const [activeRow, setActiveRow] = useState(0);
   const [isEndOfRow, setIsEndOfRow] = useState(false);
   const [guess, setGuess] = useState<string[]>([]);
-  const [wordColors, setWordColors] = useState(arr2)
+  const [wordColors, setWordColors] = useState(arr2);
+  const [isKeyboardActive, setIsKeyboardActive] = useState(true);
+  const [notInWord, setNotInWord] = useState<string[]>([]);
+  const [inWordWrongPosition, setInWordWrongPosition] = useState<string[]>([]);
+  const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>(
+    []
+  );
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
   const [dailyWord, setDailyWord] = useState("");
@@ -32,8 +38,8 @@ const Game: NextPage = () => {
   }, [tiles]);
 
   useEffect(() => {
-    setDailyWord(useDailyWord())
-  }, [])
+    setDailyWord(useDailyWord());
+  }, []);
 
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
@@ -112,23 +118,59 @@ const Game: NextPage = () => {
       setActiveTile(rowStart + 5);
     }
 
-    if(
-      validateWord(guess.toString().replaceAll(",", "").toUpperCase())) {
+    if (validateWord(guess.toString().replaceAll(",", "").toUpperCase())) {
+      const tempArr = [...wordColors];
+      let tempWordColors = checkWord(
+        guess,
+        dailyWord.toLocaleLowerCase().split("")
+      );
 
-      // if(checkWin(guess, dailyWord.toLocaleLowerCase().split(''))) {
-      //   // stop interaction
-      //   // do something
-      //   return;
-      // }
+      for (let i = rowStart, j = 0; i < rowStart + 5; i++, j++) {
+        tempArr[i] = tempWordColors[j];
+      }
 
-      console.log(checkWord(guess, dailyWord.toLocaleLowerCase().split('')))
-      
+      setWordColors(tempArr);
+
+      const notInWordTemp = [...notInWord];
+      const inWordCorrectPositionTemp = [...inWordCorrectPosition];
+      const inWordWrongPositionTemp = [...inWordWrongPosition];
+
+      for (let k = rowStart; k < rowStart + 5; k++) {
+        const letter = tiles[k];
+        const letterState = tempArr[k];
+
+        switch (letterState) {
+          case 1:
+            notInWordTemp.push(letter);
+            break;
+
+          case 2:
+            inWordWrongPositionTemp.push(letter);
+            break;
+
+          case 3:
+            inWordCorrectPositionTemp.push(letter);
+            break;
+
+          default:
+            break;
+        }
+      }
+
+      setNotInWord([...new Set(notInWordTemp)]);
+      setInWordWrongPosition([...new Set(inWordWrongPositionTemp)]);
+      setInWordCorrectPosition([...new Set(inWordCorrectPositionTemp)]);
+
+      if (checkWin(guess, dailyWord.toLocaleLowerCase().split(""))) {
+        toast.success("You Win!");
+        document.removeEventListener("keydown", handleKeyDown);
+        setIsKeyboardActive(false);
+        return;
+      }
+
       setActiveRow(activeRow + 1);
-
       setIsEndOfRow(false);
-
       setGuess(["", "", "", "", ""]);
-
     } else {
       toast.error("Palavra Inválida", {
         style: {
@@ -142,9 +184,6 @@ const Game: NextPage = () => {
         },
       });
     }
-
-
-
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -180,8 +219,13 @@ const Game: NextPage = () => {
         isEndOfRow={isEndOfRow}
         setIsEndOfRow={setIsEndOfRow}
         rowStart={rowStart}
+        wordColors={wordColors}
       />
       <Keyboard
+        notInWord={notInWord}
+        inWordWrongPosition={inWordWrongPosition}
+        inWordCorrectPosition={inWordCorrectPosition}
+        isActive={isKeyboardActive}
         handleMouseClick={handleLetterInsertion}
         handleDelete={handleDelete}
         handleSubmit={handleSubmit}
