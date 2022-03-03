@@ -48,7 +48,11 @@ export function Keyboard({
   function checkKeyClass(letter: string) {
     const lowerCaseLetter = letter.toLowerCase();
 
-    if (notInWord.includes(lowerCaseLetter)) {
+    if (
+      notInWord.includes(lowerCaseLetter) &&
+      !inWordWrongPosition.includes(lowerCaseLetter) &&
+      !inWordCorrectPosition.includes(lowerCaseLetter)
+    ) {
       return `${styles.notInWord}`;
     } else if (
       inWordWrongPosition.includes(lowerCaseLetter) &&

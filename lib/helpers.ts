@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { Words } from "./words";
 
 export function getAvailableTiles(rowGuess: string[]) {
@@ -61,4 +62,18 @@ export function checkWord(word: string[], dailyWord: string[]) {
 
   return res;
 
+}
+
+export function toastError(message: string) {
+  toast.error(message, {
+    style: {
+      border: "1px solid #713200",
+      padding: "16px",
+      color: "#713200",
+    },
+    iconTheme: {
+      primary: "#713200",
+      secondary: "#FFFAEE",
+    },
+  });
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
-import { checkWord, getAvailableTiles } from "../lib/helpers";
+import { checkWord, getAvailableTiles, toastError } from "../lib/helpers";
 import { useDailyWord } from "../lib/hooks";
 import { validateWord } from "../lib/helpers";
 import { checkWin } from "../lib/helpers";
@@ -99,17 +99,7 @@ const Game: NextPage = () => {
     const guess = tiles.slice(rowStart, rowStart + 5);
 
     if (guess.includes("")) {
-      toast.error("Por favor insira 5 letras.", {
-        style: {
-          border: "1px solid #713200",
-          padding: "16px",
-          color: "#713200",
-        },
-        iconTheme: {
-          primary: "#713200",
-          secondary: "#FFFAEE",
-        },
-      });
+      toastError("Por favor insira 5 letras.")
       return;
     }
 
@@ -171,9 +161,9 @@ const Game: NextPage = () => {
         activeRow === 5 &&
         !checkWin(guess, dailyWord.toLocaleLowerCase().split(""))
       ) {
-        toast.error("Você perdeu :(");
+        toastError(`Palavra do dia: ${dailyWord}`);
         document.removeEventListener("keydown", handleKeyDown);
-        setGameEnded(true);
+        setGameEnded(true)
         setIsKeyboardActive(false);
         return;
       }
