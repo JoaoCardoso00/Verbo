@@ -27,9 +27,7 @@ const Game: NextPage = () => {
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
   const [notInWord, setNotInWord] = useState<string[]>([]);
   const [inWordWrongPosition, setInWordWrongPosition] = useState<string[]>([]);
-  const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>(
-    []
-  );
+  const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>([]);
   const [firstTimePlaying, setFirstTimePlaying] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const rowStart = activeRow * 5;
