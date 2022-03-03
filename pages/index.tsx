@@ -3,10 +3,17 @@ import { useEffect, useState } from "react";
 import { GuessGrid } from "../components/guess-grid/GuessGrid";
 import { Keyboard } from "../components/Keyboard/Keyboard";
 import toast from "react-hot-toast";
-import { checkWord, getAvailableTiles, toastError } from "../lib/helpers";
-import { useDailyWord } from "../lib/hooks";
+import {
+  checkWord,
+  getAvailableTiles,
+  loadGameData,
+  saveGameData,
+  toastError,
+} from "../lib/helpers";
+import { useDailyWord, useLocalStorage } from "../lib/hooks";
 import { validateWord } from "../lib/helpers";
 import { checkWin } from "../lib/helpers";
+import { gameData } from "../lib/interfaces";
 
 const Game: NextPage = () => {
   const arr = Array.apply(null, Array(30)).map(() => "");
@@ -23,10 +30,27 @@ const Game: NextPage = () => {
   const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>(
     []
   );
+  const [firstTimePlaying, setFirstTimePlaying] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
   const [dailyWord, setDailyWord] = useState("");
+
+  const gameData: gameData = {
+    tiles: tiles,
+    activeTile: activeTile,
+    activeRow: activeRow,
+    isEndOfRow: isEndOfRow,
+    guess: guess,
+    wordColors: wordColors,
+    isKeyboardActive: isKeyboardActive,
+    notInWord: notInWord,
+    inWordWrongPosition: inWordWrongPosition,
+    inWordCorrectPosition: inWordCorrectPosition,
+    firstTimePlaying: firstTimePlaying,
+    gameEnded: gameEnded,
+    wordAtTime: dailyWord,
+  };
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -40,7 +64,46 @@ const Game: NextPage = () => {
 
   useEffect(() => {
     setDailyWord(useDailyWord());
+    if (!firstTimePlaying) {
+      const previousGameData: gameData = useLocalStorage("gameData");
+      const setters = {
+        setTiles: setTiles,
+        setActiveRow: setActiveRow,
+        setActiveTile: setActiveTile,
+        setIsEndOfRow: setIsEndOfRow,
+        setGuess: setGuess,
+        setWordColors: setWordColors,
+        setIsKeyboardActive: setIsKeyboardActive,
+        setNotInWord: setNotInWord,
+        setInWordWrongPosition: setInWordWrongPosition,
+        setInWordCorrectPosition: setInWordCorrectPosition,
+        setGameEnded: setGameEnded,
+      };
+      let currentDailyWord = useDailyWord();
+      if (currentDailyWord !== previousGameData.wordAtTime) {
+        return;
+      }
+      loadGameData(previousGameData, setters);
+    }
   }, []);
+
+  useEffect(() => {
+    saveGameData(gameData);
+  }, [
+    tiles,
+    activeTile,
+    activeRow,
+    isEndOfRow,
+    guess,
+    wordColors,
+    isKeyboardActive,
+    notInWord,
+    inWordWrongPosition,
+    inWordCorrectPosition,
+    firstTimePlaying,
+    gameEnded,
+    dailyWord,
+  ]);
 
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
@@ -99,7 +162,7 @@ const Game: NextPage = () => {
     const guess = tiles.slice(rowStart, rowStart + 5);
 
     if (guess.includes("")) {
-      toastError("Por favor insira 5 letras.")
+      toastError("Por favor insira 5 letras.");
       return;
     }
 
@@ -163,8 +226,9 @@ const Game: NextPage = () => {
       ) {
         toastError(`Palavra do dia: ${dailyWord}`);
         document.removeEventListener("keydown", handleKeyDown);
-        setGameEnded(true)
+        setGameEnded(true);
         setIsKeyboardActive(false);
+
         return;
       }
 

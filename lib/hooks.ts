@@ -10,3 +10,7 @@ export function useDailyWord() {
     const dayOffset =   msOffset / 1000 / 60 / 60 / 24;
     return targetWords[Math.ceil(dayOffset)]
 }
+
+export function useLocalStorage(key: string) {
+    return JSON.parse(localStorage.getItem(key));
+}

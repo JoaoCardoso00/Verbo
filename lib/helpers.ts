@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { Words } from "./words";
+import { gameData, setters } from "../lib/interfaces";
 
 export function getAvailableTiles(rowGuess: string[]) {
   let availableTiles: number[] = [];
@@ -13,43 +14,41 @@ export function getAvailableTiles(rowGuess: string[]) {
   return availableTiles;
 }
 
-
-export function validateWord(word:string) {
+export function validateWord(word: string) {
   if (Words.includes(word)) {
     return true;
   }
   return false;
 }
 
-export function checkWin(word:string[], dailyWord:string[]) {
-  if(word.toString() === dailyWord.toString()) {
+export function checkWin(word: string[], dailyWord: string[]) {
+  if (word.toString() === dailyWord.toString()) {
     return true;
   }
-  return false
+  return false;
 }
 
 export function checkWord(word: string[], dailyWord: string[]) {
-
   // 1: Not in Word
   // 2: in Word wrong position
   // 3: in word correct position
 
   let temp = dailyWord;
-  let res: number[] = []
+  let res: number[] = [];
 
   for (let i = 0; i < word.length; i++) {
-    for(let j = 0; j < temp.length; j++) {
-      if(temp.includes(word[i])){
-        if(word[i] === temp[i]) {
+    for (let j = 0; j < temp.length; j++) {
+      if (temp.includes(word[i])) {
+        if (word[i] === temp[i]) {
           res.push(3);
-          temp[i] = ""
+          temp[i] = "";
           break;
         } else {
-          if(word[i] !== temp[j]) {
+          if (word[i] !== temp[j]) {
             continue;
           }
           res.push(2);
-          temp[j] = ""
+          temp[j] = "";
           break;
         }
       } else {
@@ -61,7 +60,6 @@ export function checkWord(word: string[], dailyWord: string[]) {
   }
 
   return res;
-
 }
 
 export function toastError(message: string) {
@@ -76,4 +74,22 @@ export function toastError(message: string) {
       secondary: "#FFFAEE",
     },
   });
+}
+
+export function saveGameData(gameData: gameData) {
+  localStorage.setItem("gameData", JSON.stringify(gameData));
+}
+
+export function loadGameData(gameData: gameData, setters: setters) {
+  setters.setTiles(gameData.tiles);
+  setters.setActiveRow(gameData.activeRow);
+  setters.setActiveTile(gameData.activeTile);
+  setters.setIsEndOfRow(gameData.isEndOfRow);
+  setters.setGuess(gameData.guess);
+  setters.setWordColors(gameData.wordColors);
+  setters.setIsKeyboardActive(gameData.isKeyboardActive);
+  setters.setNotInWord(gameData.notInWord);
+  setters.setInWordWrongPosition(gameData.inWordWrongPosition);
+  setters.setInWordCorrectPosition(gameData.inWordCorrectPosition);
+  setters.setGameEnded(gameData.gameEnded);
 }
