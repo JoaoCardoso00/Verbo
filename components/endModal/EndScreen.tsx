@@ -26,6 +26,12 @@ export function EndScreen({
       <button className="share" onClick={() => getCopyPaste(wordColors)}>
         Copiar Resultado
       </button>
+      <span className="creatorInfo">
+        Jogo feito por:{" "}
+        <a href="https://github.com/JoaoCardoso00" target="_blank">
+          João Cardoso
+        </a>
+      </span>
     </Modal>
   );
 }

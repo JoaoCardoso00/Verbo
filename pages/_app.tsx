@@ -17,7 +17,7 @@ export const gameEndedContext = createContext<gameEndedContext>(
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isOpen, setIsOpen] = useState(true);
-  const [isEndOpen, setIsEndOpen] = useState(false);
+  const [isEndOpen, setIsEndOpen] = useState(true);
   const [dailyWord, setDailyWord] = useState("");
   const [wordColors, setWordColors] = useState<number[]>([]);
   const [gameEnded, setGameEnded] = useState(false);

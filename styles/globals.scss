@@ -34,9 +34,9 @@ body {
 
 .react-modal-content {
   color: rgba(0, 0, 0, 0.774);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   width: 100%;
-  max-width: 576px;
+  max-width: 30%;
   background: #beb5b4;
   padding: 3rem;
   position: relative;
@@ -45,6 +45,18 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  img {
+    width: 15em;
+  }
+
+  @media (max-width: 1400px) {
+    font-size: 93.75%; // 15px
+  }
+
+  @media (max-width: 720) {
+    font-size: 87.5%; // 14px
+  }
 }
 
 .greenText {
@@ -88,5 +100,15 @@ body {
 
   &:hover {
     background-color: #4d4749b9;
+  }
+}
+
+.creatorInfo {
+  font-size: 1.2rem;
+  margin-top: 3rem;
+
+  a,
+  a:visited {
+    text-decoration: none;
   }
 }
