@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { Words } from "./words";
 import { gameData, setters } from "../lib/interfaces";
-import { useDailyWord } from "./hooks";
+import { targetWords } from "./targetWords";
 
 export function getAvailableTiles(rowGuess: string[]) {
   let availableTiles: number[] = [];
@@ -134,7 +134,10 @@ export function getCopyPaste(wordColors: number[]) {
 }
 
 export function getDailyWord() {
-  return useDailyWord();
+  const offsetFromDate = new Date(2022, 0, 1).getTime();
+  const msOffset = Date.now() - offsetFromDate;
+  const dayOffset = msOffset / 1000 / 60 / 60 / 24;
+  return targetWords[Math.ceil(dayOffset)];
 }
 
 export function getLocalStorage(key: string) {

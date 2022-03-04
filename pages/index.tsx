@@ -12,7 +12,6 @@ import {
   saveGameData,
   toastError,
 } from "../lib/helpers";
-import { useDailyWord } from "../lib/hooks";
 import { validateWord } from "../lib/helpers";
 import { checkWin } from "../lib/helpers";
 import { gameData } from "../lib/interfaces";
@@ -81,7 +80,7 @@ const Game: NextPage = () => {
       setInWordCorrectPosition: setInWordCorrectPosition,
       setGameEnded: setGameEnded,
     };
-    let currentDailyWord = useDailyWord();
+    let currentDailyWord = getDailyWord();
     if (currentDailyWord !== previousGameData.wordAtTime) {
       return;
     }
