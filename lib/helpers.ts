@@ -129,7 +129,7 @@ export function getCopyPaste(wordColors: number[]) {
         break;
     }
   });
-  copyPaste += "\nJogue em: url";
+  copyPaste += "\nJogue em: https://verbo.vercel.app/";
   navigator.clipboard.writeText(copyPaste);
 }
 
