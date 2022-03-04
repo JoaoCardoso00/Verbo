@@ -28,7 +28,7 @@ export function EndScreen({
       </button>
       <span className="creatorInfo">
         Jogo feito por:{" "}
-        <a href="https://github.com/JoaoCardoso00" target="_blank">
+        <a href="https://github.com/JoaoCardoso00" target="_blank" rel="noreferrer">
           João Cardoso
         </a>
       </span>
