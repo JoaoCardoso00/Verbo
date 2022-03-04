@@ -32,12 +32,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    let gameData = JSON.parse(localStorage.getItem("@Verbo:gameData"));
+    let gameData = JSON.parse(localStorage.getItem("@Verbo:gameData") || "");
     setWordColors(gameData.wordColors);
   }, [gameEnded]);
 
   useEffect(() => {
-    let gameData = JSON.parse(localStorage.getItem("@Verbo:gameData"));
+    let gameData = JSON.parse(localStorage.getItem("@Verbo:gameData") || "");
     if (gameData.gameEnded) {
       setIsEndOpen(true);
     }
