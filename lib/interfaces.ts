@@ -9,7 +9,6 @@ export interface gameData {
   notInWord: string[];
   inWordWrongPosition: string[];
   inWordCorrectPosition: string[];
-  firstTimePlaying: boolean;
   gameEnded: boolean;
   wordAtTime: string;
 }

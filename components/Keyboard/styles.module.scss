@@ -14,11 +14,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: hsl(
-    var(--hue, 336),
-    var(--saturation, 4%),
-    calc(var(--lightness-offset, 5%) + var(--lightness, 24%))
-  );
+  background-color: #4d4749;
   color: white;
   fill: white;
   text-transform: uppercase;

@@ -14,6 +14,8 @@ import { useDailyWord, useLocalStorage } from "../lib/hooks";
 import { validateWord } from "../lib/helpers";
 import { checkWin } from "../lib/helpers";
 import { gameData } from "../lib/interfaces";
+import { useContext } from "react";
+import { gameEndedContext } from "../pages/_app";
 
 const Game: NextPage = () => {
   const arr = Array.apply(null, Array(30)).map(() => "");
@@ -26,10 +28,11 @@ const Game: NextPage = () => {
   const [wordColors, setWordColors] = useState(arr2);
   const [isKeyboardActive, setIsKeyboardActive] = useState(true);
   const [notInWord, setNotInWord] = useState<string[]>([]);
+  const { gameEnded, setGameEnded } = useContext(gameEndedContext);
   const [inWordWrongPosition, setInWordWrongPosition] = useState<string[]>([]);
-  const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>([]);
-  const [firstTimePlaying, setFirstTimePlaying] = useState(false);
-  const [gameEnded, setGameEnded] = useState(false);
+  const [inWordCorrectPosition, setInWordCorrectPosition] = useState<string[]>(
+    []
+  );
   const rowStart = activeRow * 5;
   const keyLetters = "abcdefghijklmnopqrstuvwxyz";
   const [dailyWord, setDailyWord] = useState("");
@@ -45,7 +48,6 @@ const Game: NextPage = () => {
     notInWord: notInWord,
     inWordWrongPosition: inWordWrongPosition,
     inWordCorrectPosition: inWordCorrectPosition,
-    firstTimePlaying: firstTimePlaying,
     gameEnded: gameEnded,
     wordAtTime: dailyWord,
   };
@@ -62,27 +64,26 @@ const Game: NextPage = () => {
 
   useEffect(() => {
     setDailyWord(useDailyWord());
-    if (!firstTimePlaying) {
-      const previousGameData: gameData = useLocalStorage("gameData");
-      const setters = {
-        setTiles: setTiles,
-        setActiveRow: setActiveRow,
-        setActiveTile: setActiveTile,
-        setIsEndOfRow: setIsEndOfRow,
-        setGuess: setGuess,
-        setWordColors: setWordColors,
-        setIsKeyboardActive: setIsKeyboardActive,
-        setNotInWord: setNotInWord,
-        setInWordWrongPosition: setInWordWrongPosition,
-        setInWordCorrectPosition: setInWordCorrectPosition,
-        setGameEnded: setGameEnded,
-      };
-      let currentDailyWord = useDailyWord();
-      if (currentDailyWord !== previousGameData.wordAtTime) {
-        return;
-      }
-      loadGameData(previousGameData, setters);
+
+    const previousGameData: gameData = useLocalStorage("@Verbo:gameData");
+    const setters = {
+      setTiles: setTiles,
+      setActiveRow: setActiveRow,
+      setActiveTile: setActiveTile,
+      setIsEndOfRow: setIsEndOfRow,
+      setGuess: setGuess,
+      setWordColors: setWordColors,
+      setIsKeyboardActive: setIsKeyboardActive,
+      setNotInWord: setNotInWord,
+      setInWordWrongPosition: setInWordWrongPosition,
+      setInWordCorrectPosition: setInWordCorrectPosition,
+      setGameEnded: setGameEnded,
+    };
+    let currentDailyWord = useDailyWord();
+    if (currentDailyWord !== previousGameData.wordAtTime) {
+      return;
     }
+    loadGameData(previousGameData, setters);
   }, []);
 
   useEffect(() => {
@@ -98,7 +99,6 @@ const Game: NextPage = () => {
     notInWord,
     inWordWrongPosition,
     inWordCorrectPosition,
-    firstTimePlaying,
     gameEnded,
     dailyWord,
   ]);
@@ -156,7 +156,7 @@ const Game: NextPage = () => {
     setTiles(newTiles);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const guess = tiles.slice(rowStart, rowStart + 5);
 
     if (guess.includes("")) {
@@ -212,9 +212,10 @@ const Game: NextPage = () => {
       setInWordCorrectPosition([...new Set(inWordCorrectPositionTemp)]);
 
       if (checkWin(guess, dailyWord.toLocaleLowerCase().split(""))) {
-        toast.success("Você ganhou!");
         document.removeEventListener("keydown", handleKeyDown);
         setIsKeyboardActive(false);
+        await new Promise(r => setTimeout(r, 1500));
+        setGameEnded(true);
         return;
       }
 
@@ -222,11 +223,10 @@ const Game: NextPage = () => {
         activeRow === 5 &&
         !checkWin(guess, dailyWord.toLocaleLowerCase().split(""))
       ) {
-        toastError(`Palavra do dia: ${dailyWord}`);
         document.removeEventListener("keydown", handleKeyDown);
-        setGameEnded(true);
         setIsKeyboardActive(false);
-
+        await new Promise(r => setTimeout(r, 1500));
+        setGameEnded(true);
         return;
       }
 

@@ -77,7 +77,7 @@ export function toastError(message: string) {
 }
 
 export function saveGameData(gameData: gameData) {
-  localStorage.setItem("gameData", JSON.stringify(gameData));
+  localStorage.setItem("@Verbo:gameData", JSON.stringify(gameData));
 }
 
 export function loadGameData(gameData: gameData, setters: setters) {
@@ -92,4 +92,42 @@ export function loadGameData(gameData: gameData, setters: setters) {
   setters.setInWordWrongPosition(gameData.inWordWrongPosition);
   setters.setInWordCorrectPosition(gameData.inWordCorrectPosition);
   setters.setGameEnded(gameData.gameEnded);
+}
+
+function getGameNum() {
+  const offsetFromDate = new Date(2022, 2, 4).getTime();
+  const msOffset = Date.now() - offsetFromDate;
+  const dayOffset = msOffset / 1000 / 60 / 60 / 24;
+  return Math.ceil(dayOffset);
+}
+
+export function getCopyPaste(wordColors: number[]) {
+  const noZeros = wordColors.filter((el) => el !== 0);
+  let num = noZeros.length / 5;
+  let copyPaste = `Joguei Verbo #${getGameNum()}   ${num}/6 \n\n`;
+  let indexes = [5, 10, 15, 20, 25];
+  noZeros.forEach((el, index) => {
+    switch (el) {
+      case 1:
+        copyPaste += indexes.includes(index + 1)
+          ? ":black_large_square:\n"
+          : ":black_large_square:";
+        break;
+      case 2:
+        copyPaste += indexes.includes(index + 1)
+          ? ":yellow_square:\n"
+          : ":yellow_square:";
+        break;
+      case 3:
+        copyPaste += indexes.includes(index + 1)
+          ? ":green_square:\n"
+          : ":green_square:";
+        break;
+
+      default:
+        break;
+    }
+  });
+  copyPaste += "\nJogue em: url";
+  navigator.clipboard.writeText(copyPaste);
 }

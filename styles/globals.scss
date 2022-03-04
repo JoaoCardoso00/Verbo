@@ -17,3 +17,76 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.react-modal-overlay {
+  background: rgba(128, 110, 110, 0.5);
+
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-modal-content {
+  color: rgba(0, 0, 0, 0.774);
+  font-size: 1.75rem;
+  width: 100%;
+  max-width: 576px;
+  background: #beb5b4;
+  padding: 3rem;
+  position: relative;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.greenText {
+  color: #3ff12f;
+}
+
+.yellowText {
+  color: #e4ca53;
+}
+
+.grayText {
+  color: #868699;
+}
+
+.goodLuck {
+  font-size: 1.5rem;
+}
+
+.tutorialBottomContainer {
+  display: flex;
+}
+
+.firstP {
+  border-right: 2px solid rgba(0, 0, 0, 0.582);
+  margin-right: 2rem;
+}
+
+.dailyWordInfo {
+  font-size: 3rem;
+}
+
+.share {
+  padding: 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #4d4749;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.1s;
+
+  &:hover {
+    background-color: #4d4749b9;
+  }
+}
