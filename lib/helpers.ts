@@ -141,5 +141,5 @@ export function getDailyWord() {
 }
 
 export function getLocalStorage(key: string) {
-  return JSON.parse(localStorage.getItem(key) || "");
+  return JSON.parse(localStorage.getItem(key) || "{}");
 }

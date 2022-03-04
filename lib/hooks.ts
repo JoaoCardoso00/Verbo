@@ -11,6 +11,6 @@ export function useDailyWord() {
 }
 
 export function useLocalStorage(key: string) {
-  return JSON.parse(localStorage.getItem(key) || "");
+  return JSON.parse(localStorage.getItem(key) || "{}");
 }
 
