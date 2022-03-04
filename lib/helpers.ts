@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { Words } from "./words";
 import { gameData, setters } from "../lib/interfaces";
+import { useDailyWord } from "./hooks";
 
 export function getAvailableTiles(rowGuess: string[]) {
   let availableTiles: number[] = [];
@@ -130,4 +131,12 @@ export function getCopyPaste(wordColors: number[]) {
   });
   copyPaste += "\nJogue em: url";
   navigator.clipboard.writeText(copyPaste);
+}
+
+export function getDailyWord() {
+  return useDailyWord();
+}
+
+export function getLocalStorage(key: string) {
+  return JSON.parse(localStorage.getItem(key) || "");
 }

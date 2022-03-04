@@ -6,11 +6,13 @@ import toast from "react-hot-toast";
 import {
   checkWord,
   getAvailableTiles,
+  getDailyWord,
+  getLocalStorage,
   loadGameData,
   saveGameData,
   toastError,
 } from "../lib/helpers";
-import { useDailyWord, useLocalStorage } from "../lib/hooks";
+import { useDailyWord } from "../lib/hooks";
 import { validateWord } from "../lib/helpers";
 import { checkWin } from "../lib/helpers";
 import { gameData } from "../lib/interfaces";
@@ -60,12 +62,12 @@ const Game: NextPage = () => {
 
   useEffect(() => {
     setGuess(tiles.slice(rowStart, rowStart + 5));
-  }, [tiles]);
+  }, [tiles, rowStart]);
 
   useEffect(() => {
-    setDailyWord(useDailyWord());
+    setDailyWord(getDailyWord());
 
-    const previousGameData: gameData = useLocalStorage("@Verbo:gameData");
+    const previousGameData: gameData = getLocalStorage("@Verbo:gameData");
     const setters = {
       setTiles: setTiles,
       setActiveRow: setActiveRow,
