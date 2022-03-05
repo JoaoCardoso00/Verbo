@@ -88,6 +88,11 @@ const Game: NextPage = () => {
   }, []);
 
   useEffect(() => {
+    if(tiles.length > 30) {
+      let newTiles = [...tiles]
+      newTiles.pop()
+      setTiles(newTiles);
+    }
     saveGameData(gameData);
   }, [
     tiles,
@@ -106,6 +111,7 @@ const Game: NextPage = () => {
 
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
+    if(activeTile >= 30) return;
     const newTiles = [...tiles];
     const availableTiles = getAvailableTiles(guess);
 
