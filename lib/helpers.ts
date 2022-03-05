@@ -104,7 +104,26 @@ function getGameNum() {
 
 export function getCopyPaste(wordColors: number[]) {
   const noZeros = wordColors.filter((el) => el !== 0);
-  let num = noZeros.length / 5;
+  let numOfRows: number = noZeros.length / 5;
+
+  let num: number | string = numOfRows;
+  let hasWon: boolean = false;
+  let lastRow;
+
+  if (numOfRows === 6) {
+    lastRow = noZeros.slice(25, 30);
+    if (lastRow.includes(1) || lastRow.includes(2)) {
+      hasWon = false;
+    } else hasWon = true;
+  }
+
+  if (num === 6 && !hasWon) {
+    num = "X";
+  }
+  console.log(hasWon);
+  console.log(num);
+  console.log(lastRow);
+
   let copyPaste = `Joguei Verbo #${getGameNum()}   ${num}/6 \n\n`;
   let indexes = [5, 10, 15, 20, 25];
   noZeros.forEach((el, index) => {
@@ -129,7 +148,7 @@ export function getCopyPaste(wordColors: number[]) {
         break;
     }
   });
-  copyPaste += "\nJogue em: https://verbo.vercel.app/";
+  copyPaste += "\n\nJogue em: https://verbo.vercel.app/";
   navigator.clipboard.writeText(copyPaste);
 }
 
