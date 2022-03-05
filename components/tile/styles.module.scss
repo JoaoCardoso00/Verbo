@@ -24,9 +24,12 @@
   &.inWordWrongPosition {
     background: #e4ca53;
   }
-  
+
   &.inWordRightPosition {
     background: #66af60;
   }
 
+  &.lastTile {
+    display: none;
+  }
 }

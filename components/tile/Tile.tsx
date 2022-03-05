@@ -25,6 +25,10 @@ export function Tile({
   function checkTileClass() {
     let currentTileState = wordColors[tileNumber];
 
+    if (tileNumber === 30) {
+      return `${styles.lastTile}`;
+    }
+
     switch (currentTileState) {
       case 0:
         //empty

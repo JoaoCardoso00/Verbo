@@ -88,11 +88,6 @@ const Game: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    if(tiles.length > 30) {
-      let newTiles = [...tiles]
-      newTiles.pop()
-      setTiles(newTiles);
-    }
     saveGameData(gameData);
   }, [
     tiles,
@@ -111,7 +106,7 @@ const Game: NextPage = () => {
 
   function handleLetterInsertion(letter: string) {
     if (activeTile > rowStart + 4) return;
-    if(activeTile >= 30) return;
+    if (activeTile >= 30) return;
     const newTiles = [...tiles];
     const availableTiles = getAvailableTiles(guess);
 
@@ -154,7 +149,7 @@ const Game: NextPage = () => {
       setTiles(newTiles);
       return;
     }
-    if (activeTile <= rowStart) return;
+    if (activeTile <= rowStart && activeTile !== 30) return;
     if (activeTile === 0) return;
 
     newTiles[activeTile - 1] = "";
@@ -177,10 +172,7 @@ const Game: NextPage = () => {
 
     if (validateWord(guess.toString().replaceAll(",", "").toUpperCase())) {
       const tempArr = [...wordColors];
-      let tempWordColors = checkWord(
-        guess,
-        dailyWord.toLowerCase().split("")
-      );
+      let tempWordColors = checkWord(guess, dailyWord.toLowerCase().split(""));
 
       for (let i = rowStart, j = 0; i < rowStart + 5; i++, j++) {
         tempArr[i] = tempWordColors[j];
@@ -221,7 +213,7 @@ const Game: NextPage = () => {
       if (checkWin(guess, dailyWord.toLowerCase().split(""))) {
         document.removeEventListener("keydown", handleKeyDown);
         setIsKeyboardActive(false);
-        await new Promise(r => setTimeout(r, 1500));
+        await new Promise((r) => setTimeout(r, 1500));
         setGameEnded(true);
         return;
       }
@@ -232,7 +224,7 @@ const Game: NextPage = () => {
       ) {
         document.removeEventListener("keydown", handleKeyDown);
         setIsKeyboardActive(false);
-        await new Promise(r => setTimeout(r, 1500));
+        await new Promise((r) => setTimeout(r, 1500));
         setGameEnded(true);
         return;
       }
