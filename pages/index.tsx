@@ -173,7 +173,7 @@ const Game: NextPage = () => {
       const tempArr = [...wordColors];
       let tempWordColors = checkWord(
         guess,
-        dailyWord.toLocaleLowerCase().split("")
+        dailyWord.toLowerCase().split("")
       );
 
       for (let i = rowStart, j = 0; i < rowStart + 5; i++, j++) {
@@ -212,7 +212,7 @@ const Game: NextPage = () => {
       setInWordWrongPosition([...new Set(inWordWrongPositionTemp)]);
       setInWordCorrectPosition([...new Set(inWordCorrectPositionTemp)]);
 
-      if (checkWin(guess, dailyWord.toLocaleLowerCase().split(""))) {
+      if (checkWin(guess, dailyWord.toLowerCase().split(""))) {
         document.removeEventListener("keydown", handleKeyDown);
         setIsKeyboardActive(false);
         await new Promise(r => setTimeout(r, 1500));
@@ -222,7 +222,7 @@ const Game: NextPage = () => {
 
       if (
         activeRow === 5 &&
-        !checkWin(guess, dailyWord.toLocaleLowerCase().split(""))
+        !checkWin(guess, dailyWord.toLowerCase().split(""))
       ) {
         document.removeEventListener("keydown", handleKeyDown);
         setIsKeyboardActive(false);
