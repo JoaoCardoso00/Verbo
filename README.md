@@ -1,6 +1,6 @@
 ## Verbo
 
-Jogo de adivinhação de palavras
+Jogo de adivinhação de palavras!
 
 Jogue Aqui: https://verbo.vercel.app/
 
